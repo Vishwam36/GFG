@@ -1,6 +1,8 @@
 // By Vishwam Mundada
 // https://practice.geeksforgeeks.org/problems/trapping-rain-water/0#
 // Tricky question
+// Just compute all arrays declared here on paper to understand
+// array l is maximum block height from left and similarly for r it's from right
 
 #include <bits/stdc++.h>
 using namespace std;
