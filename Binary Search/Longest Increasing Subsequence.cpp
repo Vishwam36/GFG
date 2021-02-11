@@ -1,7 +1,8 @@
 // By Vishwam Shriram Mundada
+// It is given under DP. 
 // https://practice.geeksforgeeks.org/problems/longest-increasing-subsequence-1587115620/1
 // decent 
-// https://www.youtube.com/watch?v=TocJOW6vx_I&t=185s
+// https://www.youtube.com/watch?v=qW1O1a40-No
 
 // { Driver Code Starts
 #include<bits/stdc++.h>
