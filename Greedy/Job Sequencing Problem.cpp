@@ -43,3 +43,51 @@ Constraints:
 1 <= Profit <= 500
 */
 
+/*
+struct Job 
+{ 
+    int id;	 // Job Id 
+    int dead; // Deadline of job 
+    int profit; // Profit if job is over before or on deadline 
+};
+*/
+
+class Solution 
+{
+    public:
+    static bool cmp(Job a, Job b)
+    {
+        if(a.profit == b.profit)
+            return a.dead < b.dead;
+        return a.profit > b.profit;
+    }
+    
+    int findSlot(int dl, bool t[])
+    {
+        for(int i = dl; i >= 1; --i)
+            if(t[i] == 0)
+                return i;
+        return -1;
+    }
+    
+    //Function to find the maximum profit and the number of jobs done.
+    vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        vector<int> ans(2, 0);
+        sort(arr, arr+n, cmp);
+        bool t[105] = {false};
+        
+        for(int i = 0; i < n; ++i)
+        {
+            int dl = arr[i].dead;
+            int slot = findSlot(dl, t);
+            if(slot != -1)
+            {
+                ans[0]++;
+                ans[1] += arr[i].profit;
+                t[slot] = 1;
+            }
+        }
+        return ans;
+    } 
+};
