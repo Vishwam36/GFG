@@ -1,6 +1,8 @@
 // By Vishwam Shriram Mundada
 // https://practice.geeksforgeeks.org/problems/top-view-of-binary-tree/1#
 // Decent
+// TC : O(N)
+// SC : O(N)
 
 /*
 Given below is a binary tree. The task is to print the top view of binary tree. Top view of a binary tree is the set of nodes visible when 
@@ -51,8 +53,8 @@ class Solution
     public:
     vector<int> topView(Node *root)
     {
-        vector<pair<int, int> > m;
-        int left = 1, right = -1;
+        vector<int> left, right;
+        int left_bound = 1, right_bound = 0; // important how you set
         
         queue<pair<Node*, int> > q;
         q.push({root, 0});
@@ -63,11 +65,15 @@ class Solution
             int level = q.front().second;
             q.pop();
             
-            if(level < left || level > right)
+            if(level < left_bound)
             {
-                left = min(left, level);
-                right = max(right, level);
-                m.push_back({level, curr->data});
+                left_bound = level;
+                left.push_back(curr->data);
+            }
+            else if(level > right_bound)
+            {
+                right_bound = level;
+                right.push_back(curr->data);
             }
             
             if(curr->left)
@@ -76,10 +82,15 @@ class Solution
                 q.push({curr->right, level+1});
         }
         
-        sort(m.begin(), m.end());
-        vector<int> res(m.size());
-        for(int i = 0; i < m.size(); ++i)
-            res[i] = m[i].second;
+        vector<int> res(left.size() + right.size());
+        
+        reverse(left.begin(), left.end());
+        
+        for(int i = 0; i < left.size(); ++i)
+            res[i] = left[i];
+        for(int i = 0; i < right.size(); ++i)
+            res[i + left.size()] = right[i];
+        
         return res;
     }
 };
