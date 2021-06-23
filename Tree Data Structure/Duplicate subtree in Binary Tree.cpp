@@ -44,6 +44,8 @@ Constraints:
 
 // REF : https://www.youtube.com/watch?v=_j7yb_nWFO8
 
+// App 1 : O(N)
+
 unordered_map<string, int> m;
 
 // returns preorder of root wirh some '$'s
@@ -73,4 +75,56 @@ bool dupSub(Node *root)
             return true;
     
     return false;
+}
+
+
+// App 2 : Brute Force
+// Check for each node
+
+Node* global;
+
+bool check(Node* root, Node* cand)
+{
+    if(!root && !cand)
+        return true;
+    if((!root && cand) || (root && !cand))
+        return false;
+    
+    bool ans = false;
+    if(root->data == cand->data && root != cand)
+        ans = ans || (check(root->left, cand->left) && check(root->right, cand->right));
+
+    ans = ans || check(root->left, global) || check(root->right, global);
+    
+    return ans;
+}
+
+bool dupSub(Node *root)
+{
+    if(!root || (!root->left && !root->right))
+        return false;
+    
+    bool ans = false;
+    queue<Node*> q;
+    q.push(root);
+    
+    while(!q.empty())
+    {
+        Node* curr = q.front(); q.pop();
+        
+        if(!curr->left && !curr->right)
+            continue;
+        
+        global = curr;
+        ans = ans || check(root, curr);
+        
+        if(curr->left)
+            q.push(curr->left);
+        if(curr->right)
+            q.push(curr->right);
+        
+        if(ans)
+            return ans;
+    }
+    return ans;
 }
