@@ -34,6 +34,8 @@ Constraints:
 1<=|pat|<|S|
 */
 
+// Rabin-Karp / Rolling Hash algorithm
+
 class Solution
 {
     public:
@@ -109,6 +111,56 @@ class Solution
         
         for(int i = 0; i < ans.size(); ++i)
             ans[i] += 1; // make 1-indexed
+        
+        if(ans.size() == 0)
+            ans.push_back(-1);
+        return ans;
+    }
+};
+
+
+// Boyer Moore algorithm
+
+class Solution
+{
+    public:
+    unordered_map<char, int> bad_match;
+    
+    void init(string pat)
+    {
+        for(int i = 0; i < pat.size(); ++i)
+            bad_match[pat[i]] = pat.size() - i -1;
+        
+        bad_match[pat.back()] = 1; // we cant keep 0 here
+    }
+    
+    vector <int> search(string pat, string txt)
+    {
+        init(pat);
+        int np = pat.size(), nt = txt.size();
+        vector<int> ans;
+        for(int i = 0; i < nt;)
+        {
+            int j = np-1;
+            
+            if(j+i >= nt)
+                break;
+            
+            while(j >= 0 && pat[j] == txt[j+i])
+                --j;
+            
+            if(j < 0)
+            {
+                ans.push_back(i+1);
+                ++i;
+                continue;
+            }
+            
+            if(bad_match.find(txt[i+np-1]) != bad_match.end())
+                i += bad_match[txt[i+np-1]];
+            else
+                i += pat.size();
+        }
         
         if(ans.size() == 0)
             ans.push_back(-1);
