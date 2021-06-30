@@ -1,6 +1,7 @@
 // By Vishwam Shriram Mundada
 // https://practice.geeksforgeeks.org/problems/mobile-numeric-keypad5456/1#
 // Easy
+// REF : https://www.geeksforgeeks.org/mobile-numeric-keypad-problem/
 
 /*
 Given the mobile numeric keypad. You can only press buttons that are up, left, right, or down to the current button.You are not allowed to press bottom row corner buttons
@@ -41,6 +42,10 @@ Constraints:
 1 ≤ N ≤ 25
 */
 
+// App 1 :
+// TC : O(N)
+// SC : O(N)
+
 class Solution{
 	public:
 	vector<vector<int> > adj = {{0, 8},
@@ -80,5 +85,66 @@ class Solution{
 		    ans += rec(i, n-1);
 		
 		return ans;
+	}
+};
+
+
+// App 2 : 
+// TC : O(N * 10);
+// SC : O(1)
+
+class Solution{
+	public:
+	vector<vector<int> > adj = {{0, 8},
+	                            {1, 2, 4},
+	                            {2, 1, 3, 5},
+	                            {3, 2, 6},
+	                            {4, 1, 5, 7},
+	                            {5, 2, 4, 6, 8},
+	                            {6, 3, 5, 9},
+	                            {7, 4, 8},
+	                            {8, 5, 7, 9, 0},
+	                            {9, 6, 8}};
+	
+	// get previous values of v1 into v2
+	void get(vector<long long> &v2, vector<long long> &v1)
+	{
+	    for(int i = 0; i < 10; ++i)
+	    {
+	        v2[i] = 0;
+	        for(auto next : adj[i])
+	            v2[i] += v1[next];
+	    }
+	}
+	
+	long long getCount(int n)
+	{
+	    int turn = 0;
+	    vector<long long> v1(10, 1);
+	    vector<long long> v2(10, 0);
+	    
+	    for(int i = 0; i < n-1; ++i)
+	    {
+	        if(turn == 0)
+	        {
+	            get(v2, v1);
+	            turn = 1;
+	        }
+	        else
+	        {
+	            get(v1, v2);
+	            turn = 0;
+	        }
+	    }
+	    
+	    long long ans = 0;
+	    if(turn == 0)
+	        for(int i = 0; i < 10; ++i)
+	            ans += v1[i];
+	    else
+	        for(int i = 0; i < 10; ++i)
+	            ans += v2[i];
+	    
+	    return ans;
 	}
 };
