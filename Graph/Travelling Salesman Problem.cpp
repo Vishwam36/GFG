@@ -24,8 +24,8 @@ Your Task:
 You don't need to read or print anyhting. Your task is to complete the function total_cost() which takes cost as input parameter and 
 returns the total cost to visit each city exactly once starting from city 0 and again comback to city 0. 
 
-Expected Time Complexity: O(2n * n2)
-Expected Space Compelxity: O(2n * n)
+Expected Time Complexity: O(2^n * n^2)
+Expected Space Compelxity: O(2^n * n)
 
 Constraints:
 1 <= n <= 10
