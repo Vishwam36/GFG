@@ -1,5 +1,5 @@
 // By Vishwam Shriram Mundada
-// https://www.geeksforgeeks.org/merge-sort-for-linked-list/
+// https://practice.geeksforgeeks.org/problems/sort-a-linked-list/1#
 // Good LL implementation
 
 /*
@@ -45,6 +45,9 @@ struct Node
 };
 */
 
+// TC : O(N logN)
+// SC : O(1)
+
 class Solution{
   public:
     int length(Node* head)
@@ -53,82 +56,58 @@ class Solution{
         while(head)
         {
             head = head->next;
-            n++;
+            ++n;
         }
         return n;
     }
     
-    void merge(Node* head, Node* left, Node* right)
+    Node* merge(Node* t1, Node* t2)
     {
-        Node* t1 = left, *t2 = right, *t3 = head;
+        Node* newHead = new Node(-1);
+        Node* temp = newHead;
         
         while(t1 && t2)
         {
             if(t1->data <= t2->data)
             {
-                t3->data = t1->data;
+                temp->next = t1;
                 t1 = t1->next;
             }
             else
             {
-                t3->data = t2->data;
+                temp->next = t2;
                 t2 = t2->next;
             }
-            t3 = t3->next;
+            temp = temp->next;
         }
         
-        while(t1)
-        {
-            t3->data = t1->data;
-            t1 = t1->next;
-            t3 = t3->next;
-        }
+        if(t1)
+            temp->next = t1;
+        else
+            temp->next = t2;
         
-        while(t2)
-        {
-            t3->data = t2->data;
-            t2 = t2->next;
-            t3 = t3->next;
-        }
+        return newHead->next;
     }
     
-    //Function to sort the given linked list using Merge Sort.
     Node* mergeSort(Node* head) 
     {
-        if(head == NULL || head->next == NULL)
+        if(head->next == NULL)
             return head;
+    
+        Node* head2 = head, *pre;
         
         int n = length(head);
-        int mid = n % 2 == 0 ? n/2 : (n/2)+1;
-        
-        int nl = mid, nr = n-mid;
-        
-        Node* left = new Node(head->data);
-        Node* temp = head->next, *t1 = left;
-        while(--nl)
+        for(int i = 0; i < n/2; ++i)
         {
-            Node* newNode = new Node(temp->data);
-            t1->next = newNode;
-            t1 = t1->next;
-            temp = temp->next;
+            pre = head2;
+            head2 = head2->next;
         }
         
-        Node* right = new Node(temp->data);
-        Node* t2 = right;
-        temp = temp->next;
-        while(--nr)
-        {
-            Node* newNode = new Node(temp->data);
-            t2->next = newNode;
-            t2 = t2->next;
-            temp = temp->next;
-        }
+        pre->next = NULL;
         
-        mergeSort(left);
-        mergeSort(right);
+        head = mergeSort(head);
+        head2 = mergeSort(head2);
         
-        merge(head, left, right);
-        
-        return head;
+        return merge(head, head2);
     }
 };
