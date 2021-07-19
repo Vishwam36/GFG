@@ -27,6 +27,26 @@ Constraints:
 1 <= a[i], b[i] <= 2*10^5
 */
 
+// App 1 : Easy
+
+class Solution{
+    public:
+    vector<int> mergeHeaps(vector<int> &a, vector<int> &b, int n, int m)
+    {
+        vector<int> ans;
+        
+        for(auto num : a)
+            ans.push_back(num);
+        
+        for(auto num : b)
+            ans.push_back(num);
+            
+        sort(ans.begin(), ans.end(), greater<int>());
+        return ans;
+    }
+};
+
+// App 2 :
 // ShiftUp is not getting accepted, I dont know why. It also gives different but correct max-heap
 
 int p(int i)
