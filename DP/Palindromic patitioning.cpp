@@ -31,9 +31,11 @@ Constraints:
 
 class Solution{
 public:
-    int dp[501][501];
+    #define ll long long
     
-    bool isPalindrome(string &s, int l, int r)
+    ll dp[1001];
+    
+    bool pali(string &s, int l, int r)
     {
         while(l < r)
             if(s[l++] != s[r--])
@@ -42,32 +44,25 @@ public:
         return true;
     }
     
-    int rec(int i, int j, string &s)
+    ll rec(int i, string &s)
     {
-        if(i >= j)
-            return dp[i][j] = 0;
+        if(dp[i] != -1)
+            return dp[i];
         
-        if(dp[i][j] != -1)
-            return dp[i][j];
+        if(i >= s.size()-1 || pali(s, i, s.size()-1))
+            return dp[i] = 0;
         
-        if(isPalindrome(s, i, j))
-            return dp[i][j] = 0;
+        ll ans = 1000;
+        for(int k = i; k < s.size()-1; ++k)
+            if(pali(s, i, k))
+                ans = min(ans, rec(k+1, s)+1);
         
-        int ans = INT_MAX;
-        for(int k = i; k < j; ++k)
-        {
-            if(dp[i][k] == 0 || isPalindrome(s, i, k))
-            {
-                int tempAns = rec(k+1, j, s) + 1;
-                ans = min(ans, tempAns);
-            }
-        }
-        return dp[i][j] = ans;
+        return dp[i] = ans;
     }
     
     int palindromicPartition(string str)
     {
         memset(dp, -1, sizeof(dp));
-        return rec(0, str.size()-1, str);
+        return rec(0, str);
     }
 };
