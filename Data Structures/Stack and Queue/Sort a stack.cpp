@@ -30,53 +30,33 @@ problem, hence a user should not read any input from stdin/console. The task is 
 */
 
 // TC : O(N*N)
-// Idea is we push minimum element from top size elements at size th position and then we reduce size by 1
+// REF : https://www.youtube.com/watch?v=XNAv8NrAwng
 
-int mini; // minimum element from stack with size elements
-int min_freq; // frequeny of mini
 
-void rec(stack<int> &s, int size)
+void insert(stack<int> &s, int ele)
 {
-    if(size == 0)
+    if(s.empty() || s.top() <= ele)
     {
-        min_freq--;
-        s.push(mini); // push minimum element from stack with top size elements
+        s.push(ele);
         return;
     }
     
-    int a = s.top(); s.pop();
-	
-    if(mini == a)
-    {
-        min_freq++;
-    }
-    else if(mini > a)
-    {
-        mini = a;
-        min_freq = 1;
-    }
+    int t = s.top(); s.pop();
+    insert(s, ele);
+    s.push(t);
+}
+
+void sortHelper(stack<int> &s)
+{
+    if(s.empty())
+        return;
     
-    rec(s, size-1);
-    
-    if(a == mini && min_freq > 0) // push only if mini is remaining, if we dont add this condition one mini will be added extra
-    {
-        min_freq--;
-        s.push(a);
-    }
-    else if(a != mini)
-    {
-        s.push(a);
-    }
+    int t = s.top(); s.pop();
+    sortHelper(s);
+    insert(s, t);
 }
 
 void SortedStack :: sort()
 {
-    int size = s.size();
-    while(size)
-    {
-        min_freq = 0;
-        mini = INT_MAX;
-        rec(s, size);
-        size--;
-    }
+    sortHelper(s);
 }
